@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="pl">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <meta name="Author" content="Michalis Kamburelis">
+  <meta name="Language" content="Polish">
+  <title>Bad Blaster - README</title>
+  
+  <style type="text/css"><!--
+    TABLE.key_list { width: 90%; }
+    TABLE.key_list TH { background: #eeeee0; }
+    TABLE.key_list TD { background: #ddddd0; }
+  --></style>
+</head>
+<body>
+      
+<h1>Bad Blaster</h1>
+Projekt na zaliczenie ćwiczeń z OCamla.<br> 
+Michalis Kamburelis (<a href="mailto:michalis@camelot.homedns.org">email</a>,
+<a href="http://www.camelot.homedns.org/~michalis/">strona WWW</a>).<br>
+
+<p>To jest wolne oprogramowanie, można je modyfikować i rozprowadzać na
+warunkach GNU General Public License, patrz <a href="COPYING">COPYING</a>.
+
+<p>Spis treści tej strony:
+<ul>
+  <li><a href="#section_compiling">Kompilacja</a>
+  <li><a href="#section_using">Uruchamianie programu, dostępne klawisze</a>
+  <li><a href="#section_coding_conventions">Konwencje kodowania</a>  
+  <li><a href="#section_resources">Źródła obrazków</a>
+</ul>
+
+<a href="apidoc/index.html">Patrz także: dokumentacja modułów Bad Blastera</a>
+
+<p><table style="background: #ddddd0"><tr><td>
+Ważne: aby można było uruchomić program należy rozpakować
+wszystko do katalogu <tt>~/.badBlaster.data/</tt> (tzn. podkatalogu 
+<tt>.badBlaster.data</tt> w swoim katalogu domowym) lub
+<tt>/usr/local/share/badBlaster/</tt> (w zależności od tego czy 
+instalujemy z prawami roota dla wszystkich użytkowników czy też
+instalujemy tylko dla siebie). Oczywiście można też rozpakować wszystko
+do dowolnego katalogu i uczynić jeden z dwóch wymienionych wyżej
+katalogów zwykłym symlinkiem do faktycznego katalogu. Jeżeli 
+nie zrobimy tego to gra nie będzie mogła załadować używanych obrazków,
+a więc nie będzie mogła się poprawnie uruchomić !
+</table>
+
+<h3><a name="section_compiling">Kompilacja</a></h3>
+
+Rzeczy niezbędne do kompilacji: 
+<ul>
+  <li><p>Oczywiście <a href="http://caml.inria.fr/ocaml/">ocaml</a>.
+    
+  <li><p>SDL. Program linkuje się dynamicznie (za pośrednictwem OcamlSDL) 
+    z zasadniczą biblioteką SDLa oraz z biblioteką SDL_image. 
+    Wszelka dokumentacja, źródła i gotowe, skompilowane biblioteki 
+    pod różne systemy operacyjne są dostępne z 
+    <a href="http://www.libsdl.org/">oficjalnej strony libsdl</a>.
+    Pod Linuxem możemy też poszukać pakietu w używanej dystrybucji,
+    w moim Debianie pakiety <tt>libsdl1.2</tt> i <tt>libsdl-image1.2</tt>
+    dają wszystko co potrzebne jest mojej grze (ale kompilacja
+    SDLa, mimo że prawdopodobnie będzie zbędna, też idzie bezproblemowo 
+    pod Linuxem).
+    
+    <p>Pod Windowsem (Cygwinem) jest nieco gorzej, musimy skompilować SDLa
+    samemu i nie wszystko idzie tak gładko. 
+    Mam do tego odpowiednie instrukcje ale nie załączam ich
+    tutaj bo i tak nie umiem skompilować OcamlSDL więc tak czy siak 
+    Windows chwilowo odpada.
+    
+  <li><p>OcamlSDL. <a href="http://ocamlsdl.sourceforge.net/home.html">Strona 
+    domowa projektu na sourceforge</a>. Używałem najnowszej wersji,
+    ocamlsdl-0.6.3. Pod Linuxa możemy ściągnąć źródła ze wspomnianej wyżej strony
+    i skompilować (przynajmniej u mnie idzie to bez problemu,
+    ./configure + make + make install)
+    ale w niektóyrych dystrybucjach możemy też znaleźć gotowe pakiety
+    - pod moim Debianem mam pakiety <tt>libsdl-ocaml-dev</tt> i
+    <tt>libsdl-ocaml</tt> które sprawiają że nie trzeba nawet nic 
+    kompilować. 
+    
+    <p>Pod Windowsem (Cygwinem) jak już wspomniałem mam problemy których 
+    nie umiem rozwiązać.
+    
+  <li><p>Makefile używa poleceń UNIXowych, ponadto raczej nie zostanie
+    zrozumiany przez make'a innego niż GNU.
+    Dlatego wymagany jest GNU make i programy rm, mv, mkdir, sed.
+    Pod Linuxem wszystko to standard. 
+    
+    <!--, pod Windowsem polecam Cygwina 
+    (Cygwin jest Panu znany więc pomijam tu szczegóły jego instalacji).
+    -->    
+</ul>
+
+<p>Jeżeli wszystkie wymienione powyżej rzeczy są już zainstalowane
+to proste polecenie <tt>make</tt> w katalogu projektu powinno 
+zbudować plik <tt>badBlaster</tt>, wersję programu w bytecode.
+Inne ważne cele zdefiniowane w tym Makefile'u:
+<ul>
+  <li><tt>badBlaster.opt</tt> - skompiluje program do kodu natywnego
+  <li><tt>htmldoc</tt> - wygeneruje dokumentację przez <tt>ocamldoc</tt>
+    do podkatalogu <tt>apidoc/</tt>
+  <li>Czyszczenie : <tt>clean</tt> wyczyści wszystko co zostało
+    zbudowane podczas kompilacji <tt>badBlaster</tt> i
+    <tt>badBlaster.opt</tt>, <tt>cleandoc</tt> usunie dokumentację,
+    <tt>reallyclean</tt> zrobi <tt>clean</tt>, <tt>cleandoc</tt>
+    i jeszcze usunie backupy Emacsa (<tt>*~</tt>).
+</ul>
+
+<h3><a name="section_using">Uruchamianie programu, dostępne klawisze</a></h3>
+
+<p>Poniższa sekcja jest dokumentacją dla typowego użytkownika 
+(tzn. kogoś kto nie musi się martwić kompilacją programu
+i czytaniem jego źródeł).
+
+<p>Zaraz po uruchomieniu program wyświetla małe menu z którego można zacząć
+grę, zakończyć program i skonfigurować ilość i rodzaje przeciwników 
+na planszy (przyciskaj <tt>s</tt> aby zwiększyć ilość przeciwników 
+o inteligencji "stupido", <tt>Shift+s</tt> aby zmniejszyć tą ilość, 
+<tt>n</tt> aby zwiększyć ilość przeciwników o inteligencji "sniper" itd.).
+
+<table class="key_list" border="1">
+  <tr><th colspan="2">Klawisze w menu startowym:
+  <tr><td>enter <td>rozpocznij grę
+  <tr><td>q <td>wyjdź z programu
+  <tr><td>s / S <td> zwiększ / zmniejsz liczbę statków komputera typu <i>stupido</i>
+  <tr><td>n / N <td> zwiększ / zmniejsz liczbę statków komputera typu <i>sniper</i>
+  <tr><td>i / I <td> zwiększ / zmniejsz liczbę statków komputera typu <i>quickie</i>
+  <tr><td>p <td> włączaj / wyłączaj poruszanie się planety
+
+  <tr><th colspan="2">Klawisze dostępne w czasie gry:
+  <tr><td>prawo, lewo <td>obracaj statkiem
+  <tr><td>góra <td>leć do przodu
+  <tr><td>spacja <td>strzelaj (można strzelać tylko kiedy nie świeci
+    się na dole napis "NO ROCKET")
+  <tr><td>p <td>pauza
+  <tr><td>F10 <td>zrzuć aktualny ekran (save screen) do pliku bb_screen&lt;int&gt;.bmp  
+  <tr><td>escape <td>zakończ grę
+    
+  <tr><th colspan="2">Klawisze dostępne gdy pojawia się końcowy tekst ("game over"):
+  <tr><td>enter, escape  <td>zakończ grę
+</table>
+
+<p>Program rozpoznaje kilka opcji z linii poleceń, uruchom program 
+z parametrem <tt>--help</tt> aby dostać krótki opis. 
+
+<p>Przede wszystkim
+użyteczna jest opcja <tt>--board WIDTHxHEIGHT</tt> która ustala wielkość
+okienka a więc jednocześnie wielkość planszy na której odbywa się gra.
+Domyślnie uruchamiane jest okienko 640x480, używając tego parametru
+można tą wielkość zwiększyć w granicach osiągalnej rozdzielczości 
+ekranu (często będzie tu przydatna inna opcja: <tt>--fullscreen</tt>).
+Polecam wypróbowanie małego skryptu <tt>bb800x600</tt> w katalogu gry.
+Ustawianie mniejszych rozmiarów niż 640x480 <i>oficjalnie nie jest dozwolone</i>
+co znaczy tyle że program nie będzie protestował ale
+dla zbyt małego okienka różne rzeczy mogą nie działać poprawnie. Więc używaj
+tego tylko do celów testowych.
+
+<h3><a name="section_coding_conventions">Konwencje kodowania</a></h3>
+
+<p>Moje konwencje nazewnictwa w OCamlu (skrzyżowanie moich nawyków
+z wymaganiami OCamla który narzuca reguły na to jaką literą zaczyna się 
+identyfikator; mniej więcej podążajace za ogólnie przyjętymi konwencjami OCamla
+jakie widzialem w modułach OCamla (standardowych, CamlImage,
+OcamlSDL, LablGL)):
+<ul>
+  <li>Klasy: <tt>c_moja_klasa</tt>
+  <li>Wyjatki: <tt>E_Moj_Wyjatek</tt>
+  <li>Typy: <tt>t_moj_typ</tt>
+  <li>Atrybuty obiektów:<br>
+    pole wewnętrzne: <tt>f_moje_pole</tt> <br>
+    funkcja "get": <tt>moje_pole</tt> <br>
+    funkcja "set": <tt>set_moje_pole</tt> <br>    
+  <li>Normalne funkcje, metody, zmienne: <tt>moja_funkcja</tt>, <tt>moja_zmienna</tt>
+  <li>Moduły: <tt>MojModul</tt> w pliku <tt>mojModul.ml</tt>. 
+    W tym projekcie moduły specyficzne dla mojej gry mają nazwy zaczynające 
+    się od "bb" (jak "Bad Blaster"). Pozostałe moduły (SdlUtils i Base) traktuję
+    jako rzeczy ogólne które mogą mi się jeszcze niejednokrotnie przydać gdy będę
+    chciał napisać coś w OCamlu.
+</ul>
+
+<p>Komentarze mam zwyczaj pisać czasem po polsku a czasem po angielsku,
+bo kiedy programuję to myślę w obu tych jezykach; najważniejsze
+komentarze w plikach ".mli" (które trafiają do dokumentacji w HTMLu) 
+postarałem się już zamienić na polski. 
+Polski tekst w komentarzach (przynajmniej w plikach .mli) pisany jest 
+z polskimi ogonkami w ISO-8859-2,
+wygenerowaną przez ocamldoc dokumentację w HTMLu przetwarzam w 
+Makefile sed'em tak żeby w HTMLu było zapisane że używam ISO-8859-2.
+
+<p>Ale identyfikatory poza komentarzami staram się zawsze pisać
+po angielsku.
+
+<p>Przyjąlem zasadę że w interfejsach modulow (.mli) nie będę używał open, 
+żeby dla czytającego kod było jasne z jakiego modułu pochodzą
+dane typy.
+
+<h3><a name="section_resources">Źródła obrazków</a></h3>
+
+<p>Różne obrazki których użyłem w grze generalnie nie są moje. 
+Większość z nich ściągnąłem z Internetu i trochę przerobiłem
+do swoich potrzeb.
+
+<ul>
+  <li>mars.png z <a href="http://quest.arc.nasa.gov/mars/photos/">
+    http://quest.arc.nasa.gov/mars/photos/</a> (przerobiony w GIMPie)
+  <li>bg_tileable.png z 
+    <a href="http://www.deepskyphoto.com/">http://www.deepskyphoto.com/</a>
+    (przerobiony w GIMPie)
+  <li>player/comp_ship_strip.png : wyrenderowany w Blenderze model starfury
+    z <a href="http://www.blenderwars.com/">http://www.blenderwars.com/</a>, 
+    przerabiany w GIMPie, obracany skryptami z użyciem ImageMagicka,
+    sklejany w jeden pasek własnym programem.
+  <li>font_002.png z <a href="http://www.algonet.se/~guld1/freefont.htm">
+    http://www.algonet.se/~guld1/freefont.htm</a>, oczywiście przerabiany
+    w GIMPie
+</ul>
+
+<p>
+<address>Michalis Kamburelis, styczeń 2004</address>
+
+</body>
+</html>
